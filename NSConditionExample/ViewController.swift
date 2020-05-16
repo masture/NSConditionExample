@@ -8,14 +8,24 @@
 
 import UIKit
 
+var semaphoreCount = 1000
+
 class LMSemaphore: Equatable {
+
     static func == (lhs: LMSemaphore, rhs: LMSemaphore) -> Bool {
         return lhs.uuid == rhs.uuid
     }
     
-    let uuid = UUID()
+    let uuid: Int
     let nsCondition = NSCondition()
     var doneCondition = false
+    
+    init() {
+        semaphoreCount += 1
+        uuid = semaphoreCount
+    }
+    
+    
 }
 
 class ViewController: UIViewController {
@@ -30,16 +40,16 @@ class ViewController: UIViewController {
 
 
     func method1() {
-        
-        guard semaphores.count < 5 else {
+        print("STARTING METHOD_1: Semaphore count: \(semaphores.count)")
+        guard semaphores.count < 10 else {
             print("To many calls...")
             return
         }
         
         let semaphore = LMSemaphore()
+        semaphore.nsCondition.lock()
         self.semaphores.append(semaphore)
-        print("STARTING METHOD 1 - \(semaphore.uuid)")
-
+        print("STARTING METHOD_1 - \(semaphore.uuid) : Semaphore count: \(semaphores.count)")
 //        print("WILL LOCK METHOD 1")
 //        myCondition.lock()
 //        print("DID LOCK METHOD 1")
@@ -50,53 +60,68 @@ class ViewController: UIViewController {
         method2(uuid: semaphore.uuid)
         
         while (!semaphore.doneCondition) {
-            print("WILL WAIT METHOD 1 - \(semaphore.uuid)")
+            print("WILL WAIT METHOD_1 - \(semaphore.uuid)")
             semaphore.nsCondition.wait()
-            print("DID WAIT METHOD 1 - \(semaphore.uuid)")
+            print("DID WAIT METHOD_1 - \(semaphore.uuid)")
         }
 
-        print("WILL UNLOCK METHOD 1 - \(semaphore.uuid)")
-        semaphore.nsCondition.unlock()
-        print("DID UNLOCK METHOD 1 - \(semaphore.uuid)")
-        
         if let index = self.semaphores.firstIndex(where: { (item) -> Bool in
             return item == semaphore
         }) {
+            print("METHOD_1: DELETING Semaphore: \(semaphore.uuid)")
             self.semaphores.remove(at: index)
+        } else {
+            print("METHOD_1: NOT FOUD TO DELETE Semaphore: \(semaphore.uuid)")
         }
-        print("ENDING METHOD 1 - \(semaphore.uuid)")
+        
+        print("WILL UNLOCK METHOD_1 - \(semaphore.uuid)")
+        semaphore.nsCondition.unlock()
+        print("DID UNLOCK METHOD_1 - \(semaphore.uuid)")
+        
+        print("ENDING METHOD_1 - \(semaphore.uuid)")
     }
 
-    func method2(uuid: UUID) {
+    func method2(uuid: Int) {
         
         guard let semaphore = semaphores.first(where: { (item) -> Bool in
             return item.uuid == uuid
         }) else {
             return
         }
-        
-        print("STARTING METHOD 2 - \(semaphore.uuid)")
-        let delay = Double.random(in: 2...5)
+//        semaphore.nsCondition.lock()
+        print("STARTING METHOD_2 - \(semaphore.uuid)")
+        let delay = Double.random(in: 5...15)
         print("DELAY: \(delay)")
         DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + delay) {
             
             semaphore.doneCondition = true
             
-            print("WILL SIGNAL FROM METHOD 2 - \(semaphore.uuid)")
+            print("WILL SIGNAL FROM METHOD_2 - \(semaphore.uuid)")
             semaphore.nsCondition.signal()
-            print("DID SIGNAL FROM METHOD 2 - \(semaphore.uuid)")
+            print("DID SIGNAL FROM METHOD_2 - \(semaphore.uuid)")
+            
         }
 
-        print("ENDING METHOD 2 - \(semaphore.uuid)")
+        print("ENDING METHOD_2 - \(semaphore.uuid) : Semaphore count: \(semaphores.count)")
+//        semaphore.nsCondition.unlock()
     }
 
     
     @IBAction func demoPressed(_ sender: UIButton) {
         
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 1.0) {
-            self.method1()
-        }
+        var count = 0
+        
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
+            count += 1
+            DispatchQueue.global(qos: .background).async {
+                self.method1()
+            }
 
+            if count >= 20 {
+                print("TIMER STOPED")
+                timer.invalidate()
+            }
+        }
     }
     
     
