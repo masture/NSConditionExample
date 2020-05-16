@@ -29,13 +29,33 @@
                                     <action selector="demoPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sXx-S1-RZy"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AvK-KU-dcN">
+                                <rect key="frame" x="111" y="443.5" width="192" height="53"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <state key="normal" title="Check Count"/>
+                                <connections>
+                                    <action selector="checkCountPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Fi-V5-jW1"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="llI-qJ-v1u">
+                                <rect key="frame" x="127" y="540.5" width="160" height="53"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <state key="normal" title="Stop Timer"/>
+                                <connections>
+                                    <action selector="stopTimer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="COj-JR-Ssb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PXy-qC-trW" secondAttribute="trailing" constant="20" id="5Pv-28-HHa"/>
                             <constraint firstItem="VxU-1X-xuO" firstAttribute="top" secondItem="PXy-qC-trW" secondAttribute="bottom" constant="88" id="5Ti-aa-BPs"/>
+                            <constraint firstItem="llI-qJ-v1u" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="7Ll-8r-pSG"/>
+                            <constraint firstItem="AvK-KU-dcN" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ApG-jg-W1O"/>
                             <constraint firstItem="PXy-qC-trW" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="88" id="QCy-0U-dCP"/>
+                            <constraint firstItem="AvK-KU-dcN" firstAttribute="top" secondItem="VxU-1X-xuO" secondAttribute="bottom" constant="44" id="Wdp-a5-yI3"/>
                             <constraint firstItem="VxU-1X-xuO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dFo-Es-UJg"/>
+                            <constraint firstItem="llI-qJ-v1u" firstAttribute="top" secondItem="AvK-KU-dcN" secondAttribute="bottom" constant="44" id="h8d-Pu-TJq"/>
                             <constraint firstItem="PXy-qC-trW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="yuF-s3-kY4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
